@@ -37,4 +37,35 @@ request.onload = function () {
     });
 };
 
+//Print the total population of countries using reduce function
+fetch('https://restcountries.com/v3.1/all')
+  .then(response => response.json())
+  .then(data => {
+    const totalPopulation = data.reduce((accumulator, country) => {
+      if (country.population) {
+        return accumulator + country.population;
+      } else {
+        return accumulator;
+      }
+    }, 0);
+
+    console.log('Total Population of Countries:', totalPopulation);
+  })
+  .catch(error => console.error('Error fetching data:', error));
+
+//Print the country that uses US dollars as currency.
+fetch('https://restcountries.com/v3.1/all')
+  .then(response => response.json())
+  .then(data => {
+    const countriesWithUSD = data.filter(country => {
+      return country.currencies && country.currencies.hasOwnProperty('USD');
+    });
+    if (countriesWithUSD.length > 0) {
+      console.log('Countries using US Dollars as currency:', countriesWithUSD.map(country => country.name.common));
+    } else {
+      console.log('No countries found that use US Dollars as currency.');
+    }
+  })
+  .catch(error => console.error('Error fetching data:', error));
+
 
